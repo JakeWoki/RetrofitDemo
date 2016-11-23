@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
 
 
                 //the first time work,the second time fail,the third time work...
-//                final Call<VersionModel> commentsCall = interceptorPrefs.getApi().version(InterceptorService.ANDROID_DEVICE, BuildConfig.VERSION_NAME, "937aa73129d02fee3a2198b487076ea0");
+//                final Call<VersionModel> commentsCall = interceptorPrefs.getApi().version(InterceptorService.ANDROID_DEVICE, BuildConfig.VERSION_NAME, "gggggggggggg");
 
 
 
