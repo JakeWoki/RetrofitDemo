@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 //stringConverter not work
-                final Call<VersionModel> commentsCall = fieldPrefs.getApi().version(FieldService.ANDROID_DEVICE, BuildConfig.VERSION_NAME, "937aa73129d02fee3a2198b487076ea0");
+                final Call<VersionModel> commentsCall = fieldPrefs.getApi().version(FieldService.ANDROID_DEVICE, BuildConfig.VERSION_NAME, "dddddddddddddd");
 
 
 
