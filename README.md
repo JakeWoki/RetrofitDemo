@@ -25,8 +25,5 @@ final Call<VersionModel> commentsCall = bodyPrefs.getApi().version(param);
 ``` Java
 final Call<VersionModel> commentsCall = interceptorPrefs.getApi().version(InterceptorService.ANDROID_DEVICE, BuildConfig.VERSION_NAME, "gggggggggggg");
 ```
-<br>if used Interceptor,the first time work,the second time fail,the third time work...
-<br>
-<br>![image](https://github.com/JakeWoki/RetrofitDemo/blob/master/20161123105759.png?raw=true)
-<br>![image](https://github.com/JakeWoki/RetrofitDemo/blob/master/20161123105837.png?raw=true)
+<br>if used Interceptor,it work
 
