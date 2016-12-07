@@ -14,30 +14,45 @@ import okio.Buffer;
 
 public class EncryptInterceptor implements Interceptor {
 
+    private static final String GET = "GET";
+    private static final String POST = "POST";
+    
     @Override
     public Response intercept(Chain chain) throws IOException {
         final Request request = chain.request();
-        final Request.Builder builder = request.newBuilder();
+        final String urlStr = request.url().toString();
+        if (GET.equals(request.method())) {
+            final Request newRequest = request.newBuilder().url(urlStr).header("User-Agent", getUserAgent()).build();
+            return chain.proceed(newRequest);
+        } else if (POST.equals(request.method())) {
+            final Request.Builder builder = request.newBuilder();
 
-        final RequestBody oldBody = request.body();
-        RequestBody newBody = null;
-        if (oldBody != null) {
-            final Buffer buffer = new Buffer();
-            oldBody.writeTo(buffer);
-            final String strOldBody = buffer.readUtf8();
-            final MediaType mediaType = MediaType.parse("application/json; charset=UTF-8");
-            String strNewBody = null;
-            try {
-                strNewBody = CipherUtils.Encrypt(strOldBody);
-            } catch (Exception e) {
-                e.printStackTrace();
+            final RequestBody oldBody = request.body();
+            if (oldBody != null) {
+                final Buffer buffer = new Buffer();
+                oldBody.writeTo(buffer);
+                final String strOldBody = buffer.readUtf8();
+                final MediaType mediaType = MediaType.parse("application/json; charset=UTF-8");
+                String strNewBody = null;
+                try {
+                    strNewBody = CipherUtils.Encrypt(strOldBody);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                final String content = "encrypt=" + strNewBody;
+                final RequestBody newBody = RequestBody.create(mediaType, content);
+
+                final Request newRequest = builder.url(urlStr)
+                        .header("User-Agent", getUserAgent())
+                        .header("Content-Type", oldBody.contentType().toString())
+                        .header("Content-Length", String.valueOf(content.length()))
+                        .method(request.method(), newBody)
+                        .build();
+
+                return chain.proceed(newRequest);
             }
-            newBody = RequestBody.create(mediaType, "encrypt=" + strNewBody);
         }
-        final Request newRequest = builder.header("User-Agent", getUserAgent()).method(request.method(), newBody)
-                .build();
-
-        return chain.proceed(newRequest);
+        return chain.proceed(request);
     }
 
     public static String getUserAgent() {
